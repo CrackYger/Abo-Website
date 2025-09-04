@@ -1,0 +1,28 @@
+Patch 015c – Admin-PIN Fix (trim, .env override, Fehlermeldung)
+
+Änderungen in src/components/AboPortal.jsx (AdminDialog):
+1) Füge oben in AdminDialog hinzu:
+   const ADMIN_PIN_VALUE = String((import.meta.env?.VITE_ADMIN_PIN ?? ADMIN_PIN ?? '')).trim();
+   const [err, setErr] = useState('');
+
+2) Ersetze den Button-Handler:
+   <AnimatedButton onClick={()=>setAuthOK(pin === ADMIN_PIN)} ...>
+
+   durch eine Funktion:
+   const submit = () => {
+     const ok = pin.trim() === ADMIN_PIN_VALUE;
+     if (!ok) { setErr('Falsche PIN'); return; }
+     setAuthOK(true);
+   };
+
+   ...und nutze dann <AnimatedButton onClick={submit} ... />
+
+3) Zeige Fehlermeldung & Tipp unter dem PIN-Feld:
+   {err && <div className="rounded-lg border border-red-300 bg-red-50/60 dark:bg-red-500/10 p-2 text-sm text-red-700 dark:text-red-300">{err}</div>}
+   <p className="text-[11px] text-zinc-500">
+     Tipp: PIN kommt aus <code>src/constants.js</code> (ADMIN_PIN)
+     {ADMIN_PIN_VALUE === '1234' ? ' – aktuell Standardwert 1234.' : ''}
+   </p>
+
+Optional: Du kannst die PIN auch über `.env` setzen:
+   VITE_ADMIN_PIN=deineGeheimePin

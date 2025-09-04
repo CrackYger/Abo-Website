@@ -1,27 +1,15 @@
-import { EUR, fmtDate } from './utils.js'
-export function labelPayment(p){ return p === 'cash' ? 'Barzahlung' : 'Überweisung' }
-export function calcNextBilling(startISO, yearly){
-  const d = new Date(startISO)
-  if (yearly) d.setFullYear(d.getFullYear() + 1)
-  else d.setMonth(d.getMonth() + 1)
+export const labelPayment = (p) => p === 'bank' ? 'Überweisung' : p === 'cash' ? 'Barzahlung' : p
+export function calcNextBilling(startIso, yearly=false){
+  const d = new Date(startIso || Date.now())
+  if (yearly) d.setFullYear(d.getFullYear()+1)
+  else d.setMonth(d.getMonth()+1)
   return d.toISOString()
 }
-export function buildInquiryMailBody({ id, planName, yearly, price, form, comingSoon = false }){
-  const lines = [
-    `Plan: ${planName} (${yearly ? 'jährlich' : 'monatlich'})`,
-    comingSoon ? 'Status: Vormerkung (kommt bald)' : '',
-    `Preis: ${EUR(price)} / Monat`,
-    `Name: ${form.name}`,
-    `E‑Mail: ${form.email}`,
-    form.phone ? `Telefon/WhatsApp: ${form.phone}` : '',
-    form.address ? `Adresse: ${form.address}` : '',
-    `Zahlungsart: ${labelPayment(form.payment)}`,
-    `Startdatum: ${fmtDate(form.startDate)}`,
-    form.notes ? `Hinweise: ${form.notes}` : '',
-    '—',
-    `ID: ${id}`,
-    `Erstellt: ${new Date().toLocaleString('de-DE')}`,
-  ].filter(Boolean)
-  return lines.join(' ')
+export function buildInquiryMailBody({ id, planName, yearly, price, form, comingSoon }){
+  return `Hallo Gianni,\n\n${comingSoon ? 'ich möchte vorgemerkt werden' : 'ich möchte ein Abo anfragen'}:\n` +
+    `Plan: ${planName} (${yearly ? 'jährlich' : 'monatlich'})\n` +
+    `Preis: ${price} EUR / Monat\n` +
+    `Name: ${form.name}\nE-Mail: ${form.email}\nTelefon: ${form.phone || '-'}\n` +
+    `Adresse: ${form.address || '-'}\nHinweise: ${form.notes || '-'}\n` +
+    `${comingSoon ? 'Wunschtermin' : 'Start'}: ${form.startDate}\n\nAbo-ID: ${id}\n`
 }
-export { EUR, fmtDate }

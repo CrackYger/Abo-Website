@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* visual candy */
+@keyframes floaty { 0%{ transform: translate3d(0,0,0)} 50%{ transform: translate3d(6px,-8px,0)} 100%{ transform: translate3d(0,0,0)} }
+@keyframes glowPulse { 0%,100%{ opacity: .18 } 50%{ opacity: .34 } }
+@keyframes shimmer { 0%{ background-position: 0% 50% } 100%{ background-position: 200% 50% } }
+.float-slow { animation: floaty 12s ease-in-out infinite }
+.glow { animation: glowPulse 6s ease-in-out infinite }
+.btn-shimmer { position: relative; color: white; background: linear-gradient(90deg, #111 0%, #111 40%, #19c6c6 60%, #10b981 70%, #111 100%); background-size:200% 100%; animation: shimmer 3.5s linear infinite }
+.dark .btn-shimmer { color: #0a0a0a; background: linear-gradient(90deg, #fff 0%, #fff 40%, #67e8f9 60%, #6ee7b7 70%, #fff 100%) }
+.btn-shimmer::after { content:''; position:absolute; inset:0; border-radius:.75rem; box-shadow:0 8px 24px rgba(16,185,129,.25), inset 0 1px rgba(255,255,255,.15); pointer-events:none }
+/* card glow */
+.card-glow { position: relative }
+.card-glow::before { content:''; position:absolute; inset:-1px; border-radius:1rem; background: radial-gradient(120px 80px at 80% 0%, rgba(34,211,238,.3), transparent 60%), radial-gradient(120px 80px at 0% 100%, rgba(16,185,129,.25), transparent 60%); filter: blur(16px); opacity:0; transition:opacity .3s ease }
+.card-glow:hover::before { opacity:1 }
+/* shake for errors */
+@keyframes shake { 0%, 100% { transform: translateX(0) } 20% { transform: translateX(-6px) } 40% { transform: translateX(6px) } 60% { transform: translateX(-4px) } 80% { transform: translateX(4px) } }
+.shake { animation: shake .38s ease both }

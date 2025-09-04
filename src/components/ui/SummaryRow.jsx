@@ -1,9 +1,9 @@
 import React from 'react'
 export default function SummaryRow({ k, v }){
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-zinc-200/60 dark:border-zinc-800/60 py-2">
-      <span className="text-zinc-500">{k}</span>
-      <span className="font-medium text-right whitespace-pre-wrap">{v}</span>
+    <div className="flex items-center justify-between gap-4 rounded-lg border border-zinc-200 dark:border-zinc-800 px-3 py-2">
+      <div className="text-xs uppercase tracking-wide text-zinc-500">{k}</div>
+      <div className="text-sm">{v}</div>
     </div>
   )
 }
